@@ -1,55 +1,32 @@
-const {frutas, dinero} = require('./fruta.js');
-const cowsay = require("cowsay");
-frutas.forEach(item=>{
-    console.count(item);
+const express = require("express");
+const app = express();
+const port = process.env.PORT || 3000;
+
+//motor de plantillas
+app.set('view engine', 'ejs');
+app.set('views', __dirname + '/view');
+
+app.use(express.static(__dirname + "/public"));
+
+
+app.use("/", require('./router/rutasWeb'));
+app.use("/mascotas", require('./router/mascotas'));
+
+app.get("/404", (req, res) => {
+    res.render('404', { 
+        titulo: "404",
+        descripcion: "pagina perdida"
+    });
 });
-console.log(dinero);
-
-
-const mensaje =(nombre)=>{
-    return 'hola soy '+ nombre;
-};
-const resultado = mensaje('Tomas');
-console.log(resultado);
-
-const suma = (num = 0)=>{
-    console.log(num + 3);
-}
-suma(2);
-
-//template string
-const numeroDos = (num1, num2)=>(`la suma es ${num1 + num2}`);
-const resultadoDos= numeroDos(20,35);
-console.log(resultadoDos);
-//objetos
-
-const mascota ={
-    nombre: 'Tom',
-    edad: 11,
-    raza: ['peludo', 'negro']
-}
-/* const nombreMascota=mascota.nombre;
-const razaMascota=mascota.raza[0];
-console.log(nombreMascota);
-console.log(razaMascota); */
-
-const {nombre, edad, raza}= mascota;
-console.log(nombre, edad, raza);
 
 
 
-const web ={
-    nombre: 'google',
-    links:{
-        enlace: 'www.google.com'
-    },
-    redessociales:{
-        youtube: {
-        enlace: 'youtube.com/google',
-        nombresocial: 'google yt'
-        }
-    }
-}
-const {enlace, nombresocial}= web.redessociales.youtube;
-console.log(enlace);
-console.log(nombresocial);
+
+
+app.listen(port, () => {
+  console.log(`Esuchando puerto: ${port}`);
+});
+
+app.use((req, res, next)=>{
+    res.status(404).render("404");
+})
