@@ -1,7 +1,11 @@
 const express = require("express");
 const app = express();
-require('dotenv').config()
+require('dotenv').config();
 const port = process.env.PORT || 3000;
+
+//CAPTURAR LO QUE VIENE DEL BODY//leer documentos
+app.use(express.urlencoded({ extended: true })); 
+app.use(express.json());
 
 //Conexion a base de datos
 const mongoose = require('mongoose');
@@ -18,17 +22,7 @@ app.set('views', __dirname + '/view');
 app.use(express.static(__dirname + "/public"));
 
 app.use("/", require('./router/rutasWeb'));
-
 app.use("/mascotas", require('./router/mascotas'));
-
-app.get("/404", (req, res) => {
-    res.render('404', { 
-        titulo: "404",
-        descripcion: "pagina perdida"
-    });
-});
-
-
 
 
 
@@ -36,6 +30,12 @@ app.listen(port, () => {
   console.log(`Esuchando puerto: ${port}`);
 });
 
+
+
 app.use((req, res, next)=>{
-    res.status(404).render("404");
+    res.status(404).render("404", {
+      titulo: "404",
+      descripcion: "pagina perdida"
+    });
 })
+
