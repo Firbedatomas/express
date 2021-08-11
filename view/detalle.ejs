@@ -16,7 +16,7 @@
         <input type="text" class="form-control my-2" name="descripcion" id="descripcion" value="<%= mascota.descripcion %>">
         <button class="btn btn-warning w-100" type="submit">Editar</button>
  </form>
- <button class="btn btn-danger btn-sm mt-5" id="btnEliminar" >Eliminar</button>
+ <button class="btn btn-danger btn-sm mt-5" data-id="<%= mascota.id %>" id="btnEliminar" >Eliminar</button>
 
 <% } %>
 
@@ -27,10 +27,11 @@
     <script>
         const btnEliminar = document.querySelector('#btnEliminar');
         btnEliminar.addEventListener('click', async ()=>{
-            console.log('Me diste click');
+            console.log(btnEliminar.dataset.id)  
+
             const id = btnEliminar.dataset.id;
             try {
-                const data = await fetch(`/mascotas/${id}`, {
+                const data = await fetch(`/Mascotas/${id}`, {
                 method: 'delete'
             }
                 );
@@ -44,6 +45,9 @@
                 console.log(error);
             }
         });
+
+
+    
 
 const formularioEditar = document.querySelector('#formularioEditar');
 formularioEditar.addEventListener('submit', async(e)=>{
